@@ -1,12 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
+import { useSelector } from 'react-redux';
+
 import UserProfile from './UserProfile';
 import LoginForm from './LoginForm';
 
 const AppLayout = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn } = useSelector((state) => state.user);
+
     const inputStyle = useMemo(() => ({
         verticalAlign: 'middle'
     }));
@@ -29,14 +32,15 @@ const AppLayout = ({ children }) => {
             </Menu>
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn} /> : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
-                <Col xs={24} md={12}>가운데 메뉴</Col>
+                <Col xs={24} md={12}>
+                    {children}
+                </Col>
                 <Col xs={24} md={6}>
                     <a href="https://github.com/LAH1203" target="_blank" rel="noreferrer noopener">내 깃허브</a>
                 </Col>
             </Row>
-            {children}
         </div>
     );
 };
